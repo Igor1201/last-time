@@ -16,4 +16,6 @@ deployment:
   gh-pages:
     branch: master
     commands:
+      - git config --local user.name "CircleCI Deployer"
+      - git config --local user.email "bot@circleci.com"
       - npm run publish
