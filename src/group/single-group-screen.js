@@ -24,7 +24,7 @@ export class SingleGroupScreen extends React.Component {
       (group.activities || []).forEach((aId) => {
         firebase.database().ref('/activities/' + aId).once('value', (snapshot) => {
           const activities = _.concat(this.state.activities, {
-            name: snapshot.val().name,
+              ...snapshot.val(),
             id: aId,
           });
           this.setState({ activities });

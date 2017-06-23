@@ -16,12 +16,12 @@ export class GroupListItem extends React.Component {
   render() {
     const buttons = _.map(this.state.activities || [], (activity) => {
       return (
-        <View key={activity.id}>
+        <View key={activity.id} style={{ flex: 1, alignItems: 'center' }}>
           <Text>
             { activity.name }
           </Text>
           <TouchableHighlight onPress={() => this.addEvent(activity.id)}>
-            <View style={styles.buttonView}>
+            <View style={[styles.buttonView, { backgroundColor: activity.color }]}>
               <Text style={styles.buttonText}>+</Text>
             </View>
           </TouchableHighlight>
@@ -31,7 +31,7 @@ export class GroupListItem extends React.Component {
 
     return (
       <View style={styles.activityView}>
-        <Link to={'/group/' + this.props.id}>
+        <Link style={{ flex: 1 }} to={'/group/' + this.props.id}>
           <Text style={styles.activityName}>{this.props.name}</Text>
         </Link>
         { buttons }
@@ -48,7 +48,7 @@ export class GroupListItem extends React.Component {
         firebase.database().ref('/activities/' + aId).once('value', (snapshot) => {
           const activities = _(this.state.activities)
             .concat({
-              name: snapshot.val().name,
+                ...snapshot.val(),
               id: aId,
             })
             .orderBy('name')
@@ -76,8 +76,6 @@ const styles = StyleSheet.create({
   activityView: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
     margin: 5,
     padding: 10,
     borderColor: '#999999',

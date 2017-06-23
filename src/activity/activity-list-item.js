@@ -18,7 +18,7 @@ export class ActivityListItem extends React.Component {
           <Text style={styles.activityName}>[{this.state.count}] {this.props.name}</Text>
         </Link>
         <TouchableHighlight onPress={() => this.addEvent()}>
-          <View style={styles.buttonView}>
+          <View style={[styles.buttonView, { backgroundColor: this.props.color }]}>
             <Text style={styles.buttonText}>+</Text>
           </View>
         </TouchableHighlight>

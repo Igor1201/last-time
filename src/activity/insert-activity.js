@@ -27,7 +27,8 @@ export class InsertActivity extends React.Component {
     if (this.state.name.trim() !== '') {
       const key = firebase.database().ref('/activities').push().key;
       firebase.database().ref(`/activities/${key}`).set({
-        name: this.state.name
+        name: this.state.name,
+        color: '#8884d8',
       });
     }
   }

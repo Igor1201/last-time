@@ -114,7 +114,7 @@ Route.contextTypes = Router.childContextTypes;
 export class Link extends React.Component {
   render() {
     return (
-      <TouchableHighlight onPress={() => this.context.Router.go(this.props.to)}>
+      <TouchableHighlight style={this.props.style} onPress={() => this.context.Router.go(this.props.to)}>
         <View>
           { this.props.children }
         </View>
