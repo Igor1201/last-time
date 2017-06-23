@@ -1,8 +1,7 @@
 // @flow
 /* eslint-disable import/no-extraneous-dependencies */
-const path = require('path')
-const webpack = require('webpack')
-const CompressionPlugin = require('compression-webpack-plugin')
+const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
   productionPlugins: [
@@ -21,13 +20,6 @@ module.exports = {
       },
       sourceMap: false,
       exclude: [/\.min\.js$/gi],  // skip pre-minified libs
-    }),
-    new CompressionPlugin({
-      asset: '[path].gz[query]',
-      algorithm: 'zopfli',
-      test: /\.js$|\.css$|\.html$/,
-      threshold: 10240,
-      minRatio: 0.8,
     }),
   ],
 
