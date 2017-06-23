@@ -1,4 +1,4 @@
-# Last Time
+# Last Time <sup>[demo](https://igor1201.github.io/last-time/)</sup>
 
 Track when was the last time you did something.
 
