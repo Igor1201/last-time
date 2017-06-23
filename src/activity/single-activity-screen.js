@@ -1,10 +1,38 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, TextInput, StyleSheet, Button } from 'react-native';
 import * as firebase from 'firebase';
 import * as joda from 'js-joda';
 import _ from 'lodash';
 import { Back } from '../compat/routing';
 import { Chart } from '../compat/charts';
+
+class EditActivityName extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { name: '' };
+  }
+
+  render() {
+    return (
+      <View style={styles.editActivityContainer}>
+        <TextInput
+          placeholder={this.props.name}
+          style={styles.nameInput}
+          onChangeText={(name) => this.setState({ name })} />
+        <Button title='Change' onPress={() => this.onPressChange()} />
+      </View>
+    );
+  }
+
+  onPressChange() {
+    if (this.props.id && this.state.name.trim() !== '') {
+      firebase.database().ref(`/activities/${this.props.id}`).set({
+        name: this.state.name
+      });
+    }
+    this.props.onDone();
+  }
+}
 
 export class SingleActivityScreen extends React.Component {
   constructor(props) {
@@ -12,12 +40,13 @@ export class SingleActivityScreen extends React.Component {
     this.state = {
       activity: null,
       events: [],
+      editing: false,
     };
   }
 
   componentWillMount() {
     const id = this.props.params.id;
-    firebase.database().ref('/activities/' + id).once('value', (snapshot) => {
+    firebase.database().ref('/activities/' + id).on('value', (snapshot) => {
       this.setState({
         activity: snapshot.val(),
       });
@@ -30,6 +59,7 @@ export class SingleActivityScreen extends React.Component {
 
   componentWillUnmount() {
     const id = this.props.params.id;
+    firebase.database().ref('/activities/' + id).off('value');
     firebase.database().ref('/events/' + id).off('value');
   }
 
@@ -47,9 +77,16 @@ export class SingleActivityScreen extends React.Component {
 
     return (
       <View style={{ flex: 1 }}>
-        <Text style={{ fontSize: 30 }}>
-          { this.state.activity && this.state.activity.name }
-        </Text>
+        { this.state.editing ?
+          <EditActivityName
+            id={this.props.params.id}
+            name={this.state.activity.name}
+            onDone={() => this.setState({ editing: false })} /> :
+          <Text
+            style={{ fontSize: 30 }}
+            onPress={() => this.setState({ editing: true })}>
+            { this.state.activity && this.state.activity.name }
+          </Text> }
         <Chart data={eventsData} />
         { events }
         <Back>
@@ -59,3 +96,31 @@ export class SingleActivityScreen extends React.Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    alignItems: 'stretch',
+    margin: 5,
+    padding: 10,
+    borderColor: '#999999',
+    borderStyle: 'solid',
+    borderWidth: 1,
+  },
+  nameInput: {
+    marginVertical: 5,
+    padding: 5,
+    borderColor: '#999999',
+    borderStyle: 'solid',
+    borderWidth: 1,
+  },
+  titleText: {
+    fontSize: 24,
+  },
+  editActivityContainer: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+});

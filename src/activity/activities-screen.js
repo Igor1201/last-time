@@ -34,6 +34,10 @@ export class ActivitiesScreen extends React.Component {
     });
   }
 
+  componentWillUnmount() {
+    firebase.database().ref('/activities').off('value');
+  }
+
   render() {
     return (
       <View style={styles.container}>
