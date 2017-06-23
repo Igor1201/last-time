@@ -7,8 +7,8 @@ export class LoginScreen extends React.Component {
     super(props);
     this.state = {
       error: null,
-      email: 'igor@borges.me',
-      password: '123456',
+      email: '',
+      password: '',
     };
   }
 

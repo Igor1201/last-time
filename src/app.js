@@ -1,12 +1,12 @@
 import React from 'react';
-import { AsyncStorage, Platform, StyleSheet, View, Text } from 'react-native';
+import { AsyncStorage, Platform, StyleSheet, View } from 'react-native';
 import * as firebase from 'firebase';
 import { LoginScreen } from './login-screen';
 import { MainScreen } from './main-screen';
-import { SingleActivityScreen } from './activities-screen';
-import { SingleGroupScreen } from './groups-screen';
+import { SingleActivityScreen } from './activity/single-activity-screen';
+import { SingleGroupScreen } from './group/single-group-screen';
 import _ from 'lodash';
-import { Router, Route, Link, Back } from './compat/routing';
+import { Route, Router } from './compat/routing';
 
 const initializeOnce = _.once(() => {
   const config = {

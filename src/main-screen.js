@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, StyleSheet, View } from 'react-native';
-import { ActivitiesScreen } from './activities-screen';
+import { ActivitiesScreen } from './activity/activities-screen';
 import * as firebase from 'firebase';
 
 export class MainScreen extends React.Component {
