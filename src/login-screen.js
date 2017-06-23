@@ -18,12 +18,12 @@ export class LoginScreen extends React.Component {
         <TextInput
           defaultValue={this.state.email}
           placeholder='me@email.com'
-          onChangeText={email => this.setState({email})} />
+          onChangeText={(email) => this.setState({email})} />
         <TextInput
           defaultValue={this.state.password}
           placeholder='password'
           secureTextEntry={true}
-          onChangeText={password => this.setState({password})} />
+          onChangeText={(password) => this.setState({password})} />
         <Button title='Login' onPress={() => this.doLogin()} />
         <Text style={styles.errorText}>{this.state.error && this.state.error.message}</Text>
       </View>

@@ -4,6 +4,7 @@ import * as firebase from 'firebase';
 import _ from 'lodash';
 import { GroupListItem } from '../group/group-list-item';
 import { ActivityListItem } from './activity-list-item';
+import { InsertActivity } from './insert-activity';
 
 export class ActivitiesScreen extends React.Component {
   constructor(props) {
@@ -17,7 +18,7 @@ export class ActivitiesScreen extends React.Component {
   }
 
   componentWillMount() {
-    firebase.database().ref('/activities').once('value', (snapshot) => {
+    firebase.database().ref('/activities').on('value', (snapshot) => {
       const activities = _.map(snapshot.toJSON(), (v, k) => _.assign({ key: k, id: k }, v));
       this.setState({
         activities: this.ds.cloneWithRows(activities),
@@ -47,6 +48,7 @@ export class ActivitiesScreen extends React.Component {
               enableEmptySections={true}
               dataSource={this.state.activities}
               renderRow={(a) => <ActivityListItem {...a} />}/>
+            <InsertActivity />
           </View>
         }
       </View>
