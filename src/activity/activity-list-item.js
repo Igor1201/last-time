@@ -2,8 +2,13 @@ import React from 'react';
 import { Text, TouchableHighlight, View, StyleSheet } from 'react-native';
 import * as firebase from 'firebase';
 import { Link } from '../compat/routing';
+import PropTypes from 'prop-types';
 
 export class ActivityListItem extends React.Component {
+  static contextTypes = {
+    Toast: PropTypes.object,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -38,7 +43,9 @@ export class ActivityListItem extends React.Component {
 
   addEvent() {
     const date = new Date().getTime();
-    firebase.database().ref(`/events/${this.props.id}/${date}`).set(1);
+    firebase.database().ref(`/events/${this.props.id}/${date}`).set(1, () => {
+      this.context.Toast.getToast().show('Event added');
+    });
   }
 }
 

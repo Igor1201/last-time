@@ -5,8 +5,13 @@ import * as joda from 'js-joda';
 import _ from 'lodash';
 import { Back } from '../compat/routing';
 import { Chart } from '../compat/charts';
+import PropTypes from 'prop-types';
 
 class EditActivityName extends React.Component {
+  static contextTypes = {
+    Toast: PropTypes.object,
+  };
+
   constructor(props) {
     super(props);
     this.state = { name: '' };
@@ -26,8 +31,8 @@ class EditActivityName extends React.Component {
 
   onPressChange() {
     if (this.props.id && this.state.name.trim() !== '') {
-      firebase.database().ref(`/activities/${this.props.id}`).set({
-        name: this.state.name
+      firebase.database().ref(`/activities/${this.props.id}/name`).set(this.state.name, () => {
+        this.context.Toast.getToast().show('Name changed');
       });
     }
     this.props.onDone();

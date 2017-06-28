@@ -1,12 +1,14 @@
 import React from 'react';
-import { AsyncStorage, Platform, StyleSheet, View } from 'react-native';
+import { AsyncStorage, Platform, StyleSheet, View, Button, ScrollView, Dimensions } from 'react-native';
 import * as firebase from 'firebase';
 import { LoginScreen } from './login-screen';
 import { MainScreen } from './main-screen';
 import { SingleActivityScreen } from './activity/single-activity-screen';
 import { SingleGroupScreen } from './group/single-group-screen';
 import _ from 'lodash';
+import PropTypes from 'prop-types';
 import { Route, Router } from './compat/routing';
+import Toast from 'react-native-easy-toast'
 
 const initializeOnce = _.once(() => {
   const config = {
@@ -51,16 +53,54 @@ const initializeOnce = _.once(() => {
 });
 initializeOnce();
 
-export default class App extends React.Component {
+class ToastHolder {
+  constructor() {
+    this.toast = null;
+  }
+
+  setToast(toast) {
+    this.toast = toast;
+  }
+
+  getToast() {
+    return this.toast;
+  }
+}
+
+export class App extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+    this.toast = new ToastHolder();
+  }
+
+  static childContextTypes = {
+    Toast: PropTypes.object,
+  };
+
+  getChildContext() {
+    return {
+      Toast: this.toast,
+    };
+  }
+
+  updateRef(ref) {
+    this.toast.setToast(ref);
+  }
+
   render() {
     return (
-      <Router>
-        <View>
-          <Route path='/' component={ ExampleApp } />
-          <Route path='/activity/:id' component={ SingleActivityScreen } />
-          <Route path='/group/:id' component={ SingleGroupScreen } />
-        </View>
-      </Router>
+      <View style={styles.root}>
+        <ScrollView>
+          <Router>
+            <View>
+              <Route path='/' component={ ExampleApp } />
+              <Route path='/activity/:id' component={ SingleActivityScreen } />
+              <Route path='/group/:id' component={ SingleGroupScreen } />
+            </View>
+          </Router>
+        </ScrollView>
+        <Toast ref={(ref) => this.updateRef(ref)} />
+      </View>
     );
   }
 }
@@ -90,6 +130,10 @@ export class ExampleApp extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    height: Dimensions.get('window').height,
+  },
   container: {
     flex: 1,
   },

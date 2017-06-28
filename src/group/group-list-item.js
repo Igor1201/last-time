@@ -3,8 +3,13 @@ import { StyleSheet, Text, TouchableHighlight, View } from 'react-native';
 import * as firebase from 'firebase';
 import _ from 'lodash';
 import { Link } from '../compat/routing';
+import PropTypes from 'prop-types';
 
 export class GroupListItem extends React.Component {
+  static contextTypes = {
+    Toast: PropTypes.object,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -68,7 +73,9 @@ export class GroupListItem extends React.Component {
 
   addEvent(activity) {
     const date = new Date().getTime();
-    firebase.database().ref(`/events/${activity}/${date}`).set(1);
+    firebase.database().ref(`/events/${activity}/${date}`).set(1, () => {
+      this.context.Toast.getToast().show('Event added');
+    });
   }
 }
 
